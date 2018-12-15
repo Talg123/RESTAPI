@@ -9,7 +9,7 @@ myApp.get("/test/:number",(res,req)=>{
 })
 
 myApp.get("/test/:numdsadasber/sadas",(res,req,hp,bp)=>{
-    res.write(hp);
+    res.write(JSON.stringify(hp));
 })
 
 myApp.post("/test/:number",(res,req,hp,bp)=>{
