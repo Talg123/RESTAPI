@@ -132,5 +132,9 @@ module.exports = {
             resault = {error:false,message:""}
         }
         return resault;
+    },
+
+    returnJson:(res,json)=>{
+
     }
 }
