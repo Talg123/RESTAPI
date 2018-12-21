@@ -1,6 +1,7 @@
 const http = require("http");
 const register = Symbol('register');
 const extra = require("./extra");
+const serverresponse = require("./serverresponse")
 const routes = [];
 const middlewares = {};
 
@@ -15,6 +16,7 @@ class Server{
      * runs the server
      */
     runServer(){
+        
         http.createServer(async (req,res)=>{
             
             res.setHeader("Content-type","application/json");
@@ -115,7 +117,7 @@ class Server{
      * 
      * @param {string} url 
      * @param {Array<string>?} middlewaresArr
-     * @param {(response:Response,request:Request,headerParams,bodyParamas)=>void} callBack: (response,request,headerParams,bodyParams) - return callBak 
+     * @param {(response:ServerResponse,request:Request,headerParams,bodyParamas)=>void} callBack: (response,request,headerParams,bodyParams) - return callBak 
      */
     get(url,callBack,middlewaresArr=null){
         try{
@@ -129,7 +131,7 @@ class Server{
      * 
      * @param {string} url 
      * @param {Array<string>?} middlewaresArr
-     * @param {(response:Response,request:Request,headerParams,bodyParamas)=>void} callBack: (response,request,headerParams,bodyParams) - return callBak 
+     * @param {(response:ServerResponse,request:Request,headerParams,bodyParamas)=>void} callBack: (response,request,headerParams,bodyParams) - return callBak 
      */
     post(url,callBack,middlewaresArr=null){
         try{
@@ -142,7 +144,7 @@ class Server{
      * 
      * @param {string} url 
      * @param {Array<string>?} middlewaresArr
-     * @param {(response:Response,request:Request,headerParams,bodyParamas)=>void} callBack: (response,request,headerParams,bodyParams) - return callBak 
+     * @param {(response:ServerResponse,request:Request,headerParams,bodyParamas)=>void} callBack: (response,request,headerParams,bodyParams) - return callBak 
      */
     delete(url,callBack,middlewaresArr=null){
         try{
@@ -155,7 +157,7 @@ class Server{
      * 
      * @param {string} url 
      * @param {Array<string>?} middlewaresArr
-     * @param {(response:Response,request:Request,headerParams,bodyParamas)=>void} callBack: (response,request,headerParams,bodyParams) - return callBak 
+     * @param {(response:ServerResponse,request:Request,headerParams,bodyParamas)=>void} callBack: (response,request,headerParams,bodyParams) - return callBak 
      */
     put(url,callBack,middlewaresArr=null){
         try{
