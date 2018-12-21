@@ -1,9 +1,10 @@
 const http = require("http");
+const register = Symbol('register');
 const extra = require("./extra");
 const routes = [];
 const middlewares = {};
 
-class servMe{
+class Server{
     
     constructor(port,hostname="127.0.0.1"){
         this.port = port;
@@ -13,7 +14,7 @@ class servMe{
     /**
      * runs the server
      */
-    server(){
+    runServer(){
         http.createServer(async (req,res)=>{
             
             res.setHeader("Content-type","application/json");
@@ -39,7 +40,7 @@ class servMe{
                 res.write(JSON.stringify({error:"No Such Endpoint"}));
             }
             res.end();
-        }).listen(this.port,this.hostname,()=>console.log("Server is runnign on port:"+this.port,middlewares));
+        }).listen(this.port,this.hostname,()=>console.log("Server is runnign on port:"+this.port));
     };
 
     /**
@@ -49,8 +50,8 @@ class servMe{
      * @param {Function} callBack 
      * @param {Array<string>} middlewaresArr
      */
-    register(method,url,callBack,middlewaresArr){
-        let newUrl = this.splitUrl(url);
+    [register](method,url,callBack,middlewaresArr){
+        let newUrl = extra.splitUrl(url);
         if(routes.length > 0){
             let res = routes.find(route=>extra.findRoute(route,{newUrl,method}));
             if(typeof res == "undefined"){
@@ -63,30 +64,7 @@ class servMe{
         }
     }
 
-    /**
-     * split up url and return it as object
-     * @param {string} url 
-     */
-    splitUrl(url){
-        let urlSplit = url;
-        let k = urlSplit.split("/");
-        let res = {url:"/",param:[],urlSplitted:"/"};
-        let counter = 0;
-        for(let i = 1; i<k.length;i++){
-        if(k[i][0] == ":"){
-            res.param.push(k[i])
-            counter++;
-        }else{
-            res.urlSplitted+=""+k[i]+"/";
-        }
-            res.url+=""+k[i]+"/";
-        }
-        if(counter == 0){
-            res.urlSplitted = "";
-        }
-        res.url = res.url.substring(0,res.url.length-1);
-        return res;
-    }
+
 
     /**
      * 
@@ -100,8 +78,40 @@ class servMe{
         }
         middlewares[name] = callBack;
     }
+    
+ }
+
+ exports.Server = new Server();
+
+ //class just to add new routes
+ class Router{
+     
+    constructor(){
+    
+    }
 
     /**
+     * adding route if not exists
+     * @param {*} method 
+     * @param {string} url 
+     * @param {Function} callBack 
+     * @param {Array<string>} middlewaresArr
+     */
+    [register](method,url,callBack,middlewaresArr){
+        let newUrl = extra.splitUrl(url);
+        if(routes.length > 0){
+            let res = routes.find(route=>extra.findRoute(route,{newUrl,method}));
+            if(typeof res == "undefined"){
+                routes.push({method,url:newUrl,callBack,middlewaresArr});
+            }else{
+                throw Error("Route with method:"+method + " already exists");
+            }
+        }else{
+            routes.push({method,url:newUrl,callBack,middlewaresArr});
+        }
+    }
+
+  /**
      * 
      * @param {string} url 
      * @param {Array<string>?} middlewaresArr
@@ -109,7 +119,7 @@ class servMe{
      */
     get(url,callBack,middlewaresArr=null){
         try{
-            this.register("GET",url,callBack,middlewaresArr);
+            this[register]("GET",url,callBack,middlewaresArr);
         }catch(e){
             throw new Error(e);
         }
@@ -123,7 +133,7 @@ class servMe{
      */
     post(url,callBack,middlewaresArr=null){
         try{
-            this.register("POST",url,callBack,middlewaresArr);
+            this[register]("POST",url,callBack,middlewaresArr);
         }catch(e){
             throw new Error(e);
         }
@@ -136,7 +146,7 @@ class servMe{
      */
     delete(url,callBack,middlewaresArr=null){
         try{
-            this.register("DELETE",url,callBack,middlewaresArr);
+            this[register]("DELETE",url,callBack,middlewaresArr);
         }catch(e){
             throw new Error(e);
         }
@@ -149,12 +159,12 @@ class servMe{
      */
     put(url,callBack,middlewaresArr=null){
         try{
-            this.register("PUT",url,callBack,middlewaresArr);
+            this[register]("PUT",url,callBack,middlewaresArr);
         }catch(e){
             throw new Error(e);
         }
     }
-    
+     
  }
 
- module.exports = servMe;
+ exports.Router = new Router()

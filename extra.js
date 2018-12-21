@@ -107,12 +107,10 @@ module.exports = {
             let arr = bodyParams.split("&");
             arr.forEach(val=>{
                 let param = val.split("=");
-                parsedParamas[param[0]] = param[1];
+                parsedParamas[param[0]] = decodeURIComponent(param[1]);
             })
         }
-
-
-        return parsedParamas;
+        return {bodyParams:parsedParamas};
     },
 
     /**
@@ -133,8 +131,28 @@ module.exports = {
         }
         return resault;
     },
-
-    returnJson:(res,json)=>{
-
+        /**
+     * split up url and return it as object
+     * @param {string} url 
+     */
+    splitUrl:(url)=>{
+        let urlSplit = url;
+        let k = urlSplit.split("/");
+        let res = {url:"/",param:[],urlSplitted:"/"};
+        let counter = 0;
+        for(let i = 1; i<k.length;i++){
+        if(k[i][0] == ":"){
+            res.param.push(k[i])
+            counter++;
+        }else{
+            res.urlSplitted+=""+k[i]+"/";
+        }
+            res.url+=""+k[i]+"/";
+        }
+        if(counter == 0){
+            res.urlSplitted = "";
+        }
+        res.url = res.url.substring(0,res.url.length-1);
+        return res;
     }
 }
