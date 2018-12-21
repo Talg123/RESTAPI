@@ -86,10 +86,11 @@ module.exports = {
                 headerParams[param[0]] = param[1];
             })
         }
-        if(param){
+        if(headerParams){
             return {params,headerParams};
         }
-        return headerParams;
+
+        return params;
         
     },
 
