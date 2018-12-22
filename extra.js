@@ -86,8 +86,9 @@ module.exports = {
                 headerParams[param[0]] = param[1];
             })
         }
+        
         if(headerParams){
-            return {params,headerParams};
+            return {routerParamas:params,otherParamas:headerParams};
         }
 
         return params;

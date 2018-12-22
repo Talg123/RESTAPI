@@ -1,9 +1,10 @@
 {
   "name": "rest-api-module",
-  "version": "1.1.4",
+  "version": "1.2.0",
   "main": "RESTModule.js",
   "author": "Tal Goldberg",
   "license": "ISC",
+  "readmeFilename": "README.md",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Talg123/RESTAPI.git"
