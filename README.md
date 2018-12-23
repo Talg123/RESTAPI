@@ -17,7 +17,8 @@ Server.port = 3000;
 
 Router.get("/home",(response,request,headerParams,bodyParamas)=>{
     let obj = {message:"Hello world"}
-    response.returnJson(obj);
+    //Body , Message, StatusCode, Code
+    res.returnJson(obj,"Success",200,0);
 })
 
 Server.runServer();
@@ -46,13 +47,13 @@ Router.post("/test/:id",(response,request,headerParams,bodyParamas)=>{
 And in the response we will have:
 
 ```json
-    {
-        "routeParams":{"id":"43"},
-        "otherParams":{"param1":"1","param2":"2"}
-    }
-    {
-        "bodyParams":{"accessToken":"blabla"}
-    }
+{
+    "code":0,"data":{"routerParamas":{"id":"43"},
+    "otherParamas":{"param1":"1","param2":"2"}},"message":null
+}
+{
+    "code":0,"data":{"bodyParams":{"accessToken":"blabla"}},"message":null
+}
 ```
 
 That way you save time in getting all the parameters were sent.
@@ -77,6 +78,7 @@ Server.add("name",(response,request,headerParams,bodyParamas)=>{
 });
 // Assign the middlware
 Router.get("/home",(response,request,headerParams,bodyParamas)=>{
+    //Body , Message=null, StatusCode=200, Code=0
     response.returnJson({message:"Hello World"});
 },['name']);
 

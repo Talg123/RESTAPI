@@ -5,9 +5,9 @@ module.exports = class RestResponse{
      * @param {number} statusCode
      * @param {http.ServerResponse} res 
      */
-    constructor(res,statusCode){
+    constructor(res,statusCode=null){
         response = res;
-        this.statusCode = statuscode;
+        this.statusCode = statusCode;
     }
 
     /**
@@ -18,7 +18,7 @@ module.exports = class RestResponse{
      * @param {Number} code - default 0
      * @returns Return the Object\Array as JSON with Status and Code
      */
-    returnJson(body,message,statusCode=null,code=0){
+    returnJson(body,message=null,statusCode=null,code=0){
         
         if(typeof body == "object" || body instanceof Array){
             if(statusCode != null){
