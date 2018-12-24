@@ -38,21 +38,32 @@ and in the Body Paramaters we have:
 accessToken=blabla 
 ```javascript
 
-Router.post("/test/:id",(response,request,headerParams,bodyParamas)=>{
-    response.returnJson(headerParamas);
-    response.returnJson(bodyParamas);
+router.get("/test/:id", (res, req) => {
+    res.returnJson({header:res.getHeaderParamas(),body:res.getBodyParamas()},"Success",200,0);    
 })
-
 ```
 And in the response we will have:
 
 ```json
 {
-    "code":0,"data":{"routerParamas":{"id":"43"},
-    "otherParamas":{"param1":"1","param2":"2"}},"message":null
-}
-{
-    "code":0,"data":{"bodyParams":{"accessToken":"blabla"}},"message":null
+    "code": 0,
+    "data": {
+        "header": {
+            "routerParamas": {
+                "id": "43"
+            },
+            "otherParamas": {
+                "param1": "1",
+                "param2": "2"
+            }
+        },
+        "body": {
+            "bodyParams": {
+                "accessToken": "blabla"
+            }
+        }
+    },
+    "message": "Success"
 }
 ```
 

@@ -1,13 +1,17 @@
 ﻿let response;
+let headerParams;
+let bodyParamas;
 
 module.exports = class RestResponse{
     /**
      * @param {number} statusCode
      * @param {http.ServerResponse} res 
      */
-    constructor(res,statusCode=null){
+    constructor(res,statusCode=null,hp,bp){
         response = res;
         this.statusCode = statusCode;
+        headerParams = hp;
+        bodyParamas = bp;
     }
 
     /**
@@ -34,4 +38,21 @@ module.exports = class RestResponse{
             throw new Error("Body Data not typeof Object/Array");
         }
     }
+
+    /**
+     * return the header parameters 
+     * @returns {HeaderParamas} - the header parameter object
+     */
+    getHeaderParamas(){
+        return headerParams;
+    }
+    
+    /**
+     * return the body parameters
+     * @returns {BodyParamas} - the body parameter object
+     */
+    getBodyParamas(){
+        return bodyParamas;
+    }
+
 }

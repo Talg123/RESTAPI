@@ -29,14 +29,14 @@ class Server{
                 //get the body parameters if there are any
                 let bodyParamas = await extra.getBodyParams(req);
 
-                let jsonResponse = new classes(res);
+                let jsonResponse = new classes(res,null,params,bodyParamas);
                 //check if there are middlewares to run over to check
                 if(route.middlewaresArr){
-                    let response = extra.checkAllMiddlewares(route.middlewaresArr,middlewares,res,req,params,bodyParamas);
+                    let response = extra.checkAllMiddlewares(route.middlewaresArr,middlewares,jsonResponse,req);
                     if(response.error){
                         res.write(response.message)
                     }else{
-                        route.callBack(jsonResponse,req,params,bodyParamas);
+                        route.callBack(jsonResponse,req);
                     }
                 }else{
                     route.callBack(jsonResponse,req,params,bodyParamas);
@@ -75,7 +75,7 @@ class Server{
      * 
      * @param {*} res 
      * @param {*} req 
-     * @param {(response:classes,request:Request,headerParams:HeaderParamas,bodyParamas:BodyParamas)=>void} callBack: (response,request,headerParams,bodyParams) - return callBak      
+     * @param {(response:classes,request:Request)=>void} callBack: (response,request) - return callBak      
      */
     add(name,callBack){
         if(middlewares[name]){
@@ -120,7 +120,7 @@ class Server{
      * 
      * @param {string} url 
      * @param {Array<string>?} middlewaresArr
-     * @param {(response:classes,request:Request,headerParams:HeaderParamas,bodyParamas:BodyParamas)=>void} callBack: (response,request,headerParams,bodyParams) - return callBak 
+     * @param {(response:classes,request:Request)=>void} callBack: (response,request) - return callBak 
      */
     get(url,callBack,middlewaresArr=null){
         try{
@@ -134,7 +134,7 @@ class Server{
      * 
      * @param {string} url 
      * @param {Array<string>?} middlewaresArr
-     * @param {(response:classes,request:Request,headerParams:HeaderParamas,bodyParamas:BodyParamas)=>void} callBack: (response,request,headerParams,bodyParams) - return callBak 
+     * @param {(response:classes,request:Request)=>void} callBack: (response,request) - return callBak 
      */
     post(url,callBack,middlewaresArr=null){
         try{
@@ -147,7 +147,7 @@ class Server{
      * 
      * @param {string} url 
      * @param {Array<string>?} middlewaresArr
-     * @param {(response:classes,request:Request,headerParams:HeaderParamas,bodyParamas:BodyParamas)=>void} callBack: (response,request,headerParams,bodyParams) - return callBak 
+     * @param {(response:classes,request:Request)=>void} callBack: (response,request) - return callBak 
      */
     delete(url,callBack,middlewaresArr=null){
         try{
@@ -160,7 +160,7 @@ class Server{
      * 
      * @param {string} url 
      * @param {Array<string>?} middlewaresArr
-     * @param {(response:classes,request:Request,headerParams:HeaderParamas,bodyParamas:BodyParamas)=>void} callBack: (response,request,headerParams,bodyParams) - return callBak 
+     * @param {(response:classes,request:Request)=>void} callBack: (response,request) - return callBak 
      */
     put(url,callBack,middlewaresArr=null){
         try{
