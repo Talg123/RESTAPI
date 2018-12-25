@@ -1,4 +1,9 @@
-﻿let response;
+﻿/*!
+ * rest-api-module
+ * Copyright(c) 22018 Tal Goldberg <tal-vr@hotmail.com>
+ */
+
+let response;
 let headerParams;
 let bodyParamas;
 

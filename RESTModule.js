@@ -1,3 +1,8 @@
+/*!
+ * rest-api-module
+ * Copyright(c) 22018 Tal Goldberg <tal-vr@hotmail.com>
+ */
+
 const http = require("http");
 const register = Symbol('register');
 const extra = require("./extra");
