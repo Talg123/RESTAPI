@@ -1,6 +1,6 @@
 # RESTAPI
-REST API framework, Simple and tiny.
-And no Dependencies AT ALL!.
+REST API framework, Simple and tiny.  
+And no Dependencies AT ALL!.  
 Return JSON for client.
 
 First Install the module
@@ -32,11 +32,12 @@ In the Router you can use:
 GET POST DELETE PUT.
 
 AT the callback you dont have to do much you already have the Body Paramaters and the Head paramaters
-example:
-Lets say we have POST Request:
-localhost:3000/test/43?param1=1&param2=2
-and in the Body Paramaters we have:
-accessToken=blabla 
+example:  
+Lets say we have POST Request:  
+localhost:3000/test/43?param1=1&param2=2  
+and in the Body Paramaters we have:  
+accessToken=blabla  
+
 ```javascript
 
 router.get("/test/:id", (res, req) => {
