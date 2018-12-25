@@ -73,7 +73,7 @@ That way you save time in getting all the parameters were sent.
 ## Response
 
 | method | return | example  |
-|---	|---	|---	|---	
+|---	|---	|---	|--- |	
 | returnJson | return response object  	| {code:0,data:{msg:"hello"},message:"Success"}  	| 
 | getBodyParamas | return the body parameters  	|"bodyParams": {"accessToken": "blabla"}   	| 
 | getHeaderParamas  | return the header parameters| "routerParamas": {"id": "43"},"otherParamas": {"param2": "2"}  	|
