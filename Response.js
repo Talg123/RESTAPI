@@ -39,7 +39,7 @@ module.exports = class RestResponse{
             }
             let obj = {code,data:body,message};
             response.write(JSON.stringify(obj));
-            res.end();
+            response.end();
         }else{
             throw new Error("Body Data not typeof Object/Array");
         }
