@@ -121,7 +121,9 @@ module.exports = {
             await res.then(data=>{parsedParamas = data});
             if(uploadDir.fileName){
                 parsedParamas.files.file.forEach(val=>{
-                    fs.rename(val.path,uploadDir.uploadDir+""+val.originalFilename);
+                    fs.rename(val.path,uploadDir.uploadDir+""+val.originalFilename,(err)=>{
+                        console.log(err);
+                    });
                 })
             }
         return {bodyParams:parsedParamas};
