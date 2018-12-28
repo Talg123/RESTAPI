@@ -32,9 +32,9 @@ class Server{
                 //get the header parameters if there are any
                 let params = extra.getParamas(route,currentRoute,req);
                 //get the body parameters if there are any
-                let bodyParamas = await extra.getBodyParams(req);
+                let bodyParams = await extra.getBodyParams(req);
 
-                let jsonResponse = new classes(res,null,params,bodyParamas);
+                let jsonResponse = new classes(res,null,params,bodyParams);
                 //check if there are middlewares to run over to check
                 if(route.middlewaresArr){
                     let response = extra.checkAllMiddlewares(route.middlewaresArr,middlewares,jsonResponse,req);
@@ -44,7 +44,7 @@ class Server{
                         route.callBack(jsonResponse,req);
                     }
                 }else{
-                    route.callBack(jsonResponse,req,params,bodyParamas);
+                    route.callBack(jsonResponse,req,params,bodyParams);
                 }
             }else{
                 res.write(JSON.stringify({error:"No Such Endpoint"}));

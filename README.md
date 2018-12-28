@@ -16,7 +16,7 @@ const {Server,Router} = require("rest-api-module");
 
 Server.port = 3000;
 
-Router.get("/home",(response,request,headerParams,bodyParamas)=>{
+Router.get("/home",(response,request,headerParams,bodyParams)=>{
     let obj = {message:"Hello world"}
     //Body , Message, StatusCode, Code
     res.returnJson(obj,"Success",200,0);
@@ -41,7 +41,7 @@ accessToken=blabla
 ```javascript
 
 router.get("/test/:id", (res, req) => {
-    res.returnJson({header:res.getHeaderParamas(),body:res.getBodyParamas()},"Success",200,0);    
+    res.returnJson({header:res.getHeaderParamas(),body:res.getbodyParams()},"Success",200,0);    
 })
 ```
 And in the response we will have:
@@ -76,7 +76,7 @@ That way you save time in getting all the parameters were sent.
 | method | return | example  |
 |---	|---	|---	|
 | returnJson | return response object  	| {code:0,data:{msg:"hello"},message:"Success"}  	| 
-| getBodyParamas | return the body parameters  	|"bodyParams": {"accessToken": "blabla"}   	| 
+| getbodyParams | return the body parameters  	|"bodyParams": {"accessToken": "blabla"}   	| 
 | getHeaderParamas  | return the header parameters| "routerParamas": {"id": "43"},"otherParamas": {"param2": "2"}  	|
 
 ## Middlewares
@@ -91,14 +91,14 @@ them if you want
 
 Server.port = 3000;
 //first you add the name of the middleware then you use the callBack function
-Server.add("name",(response,request,headerParams,bodyParamas)=>{
+Server.add("name",(response,request,headerParams,bodyParams)=>{
     if(headerParams.paramas.name == "I am Cool"){
         return true;
     }
     return false;
 });
 // Assign the middlware
-Router.get("/home",(response,request,headerParams,bodyParamas)=>{
+Router.get("/home",(response,request,headerParams,bodyParams)=>{
     //Body , Message=null, StatusCode=200, Code=0
     response.returnJson({message:"Hello World"});
 },['name']);

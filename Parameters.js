@@ -10,8 +10,8 @@ class HeaderParamas {
     }
 }
 
-class BodyParamas {
-    constructor(bodyParamas) {
-        this.bodyParamas = bodyParamas;
+class bodyParams {
+    constructor(bodyParams) {
+        this.bodyParams = bodyParams;
     }
 }
