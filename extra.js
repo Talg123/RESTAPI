@@ -117,7 +117,7 @@ module.exports = {
                 }
             })
         }
-        return {bodyParams:parsedParamas};
+        return {bodyParamas:parsedParamas};
     },
 
     /**
