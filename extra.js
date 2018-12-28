@@ -1,3 +1,7 @@
+var multiparty = require("multiparty");
+var util = require("util");
+var fs = require("fs");
+
 module.exports = {
      /**
      * return true if any route of the routes are the same, and have the same method
@@ -99,25 +103,42 @@ module.exports = {
     /**
      * return the body parameters that were sent
      */
-    getBodyParams:async (req) =>{
+    getBodyParams:async (req,uploadDir) =>{
         let bodyParams="";
         let parsedParamas={};
         await req.on("data",data=>{
             bodyParams+=data.toString();
         });
-        if(bodyParams != ""){
-            let arr = bodyParams.split("&");
-            arr.forEach(val=>{
-                let param = val.split("=");
-                try {
-                    parsedParamas[param[0]] = decodeURIComponent(param[1]);
-                } catch (error) {
-                    parsedParamas[param[0]] = param[1];
-                    
-                }
+        if(req.headers['content-type'].indexOf("multipart/form-data") != -1){
+            var form = new multiparty.Form({
+                uploadDir:uploadDir.uploadDir
+            });
+            let res = new Promise((resolve,rej)=>{
+                form.parse(req,(err,fields,files)=>{
+                    resolve({fields,files});
+                })
             })
+            await res.then(data=>{parsedParamas = data});
+            if(uploadDir.fileName){
+                parsedParamas.files.file.forEach(val=>{
+                    fs.rename(val.path,uploadDir.uploadDir+""+val.originalFilename);
+                })
+            }
+        return {bodyParams:parsedParamas};
+        }else{
+            if(bodyParams != ""){
+                let arr = bodyParams.split("&");
+                arr.forEach(val=>{
+                    let param = val.split("=");
+                    try {
+                        parsedParamas[param[0]] = decodeURIComponent(param[1]);
+                    } catch (error) {
+                        parsedParamas[param[0]] = param[1];
+                        
+                    }
+                })
+            }
         }
-        return {bodyParamas:parsedParamas};
     },
 
     /**

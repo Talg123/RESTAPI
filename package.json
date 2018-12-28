@@ -20,5 +20,7 @@
     "url": "https://github.com/Talg123/RESTAPI/issues"
   },
   "homepage": "https://github.com/Talg123/RESTAPI#readme",
-  "dependencies": {}
+  "dependencies": {
+    "multiparty": "^4.2.1"
+  }
 }

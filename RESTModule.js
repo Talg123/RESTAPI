@@ -24,7 +24,7 @@ class Server{
     runServer(){
         
         http.createServer(async (req,res)=>{
-            res.setHeader('Access-Control-Allow-Origin', req.headers.origin);            
+            // res.setHeader('Access-Control-Allow-Origin', req.headers.origin);           
             res.setHeader("Content-type","application/json");
             let currentRoute = {url:req.url, method:req.method};
             let route = routes.find(route=>extra.findRouteToServe(route,currentRoute))
@@ -32,23 +32,23 @@ class Server{
                 //get the header parameters if there are any
                 let params = extra.getParamas(route,currentRoute,req);
                 //get the body parameters if there are any
-                let bodyParamas = await extra.getBodyParams(req);
+                let bodyParams = await extra.getBodyParams(req,route.uploadDir);
 
-                let jsonResponse = new classes(res,null,params,bodyParamas);
+                let jsonResponse = new classes(res,null,params,bodyParams);
                 //check if there are middlewares to run over to check
                 if(route.middlewaresArr){
                     let response = extra.checkAllMiddlewares(route.middlewaresArr,middlewares,jsonResponse,req);
                     if(response.error){
-                        jsonResponse.returnJson(response.message,"ERROR",404,99)
+                        jsonResponse.returnJson(response.message,"Error",404,99)
                     }else{
                         route.callBack(jsonResponse,req);
                     }
                 }else{
-                    route.callBack(jsonResponse,req,params,bodyParamas);
+                    route.callBack(jsonResponse,req,params,bodyParams);
                 }
             }else{
-                res.write(JSON.stringify({error:"No Such Endpoint"}));
-                res.end();
+                 new classes(res,null,null,null).returnJson({error:"No Such Endpoint"},"NoEndPoint",303,99);
+                
             }
         }).listen(this.port,this.hostname,()=>console.log("Server is runnign on port:"+this.port));
     };
@@ -60,7 +60,7 @@ class Server{
      * @param {Function} callBack 
      * @param {Array<string>} middlewaresArr
      */
-    [register](method,url,callBack,middlewaresArr){
+    [register](method,url,callBack,middlewaresArr,uploadDir){
         let newUrl = extra.splitUrl(url);
         if(routes.length > 0){
             let res = routes.find(route=>extra.findRoute(route,{newUrl,method}));
@@ -70,7 +70,7 @@ class Server{
                 throw Error("Route with method:"+method + " already exists");
             }
         }else{
-            routes.push({method,url:newUrl,callBack,middlewaresArr});
+            routes.push({method,url:newUrl,callBack,middlewaresArr,uploadDir});
         }
     }
 
@@ -106,18 +106,19 @@ class Server{
      * @param {string} url 
      * @param {Function} callBack 
      * @param {Array<string>} middlewaresArr
+     * @param {string} uploadDir
      */
-    [register](method,url,callBack,middlewaresArr){
+    [register](method,url,callBack,middlewaresArr,uploadDir){
         let newUrl = extra.splitUrl(url);
         if(routes.length > 0){
             let res = routes.find(route=>extra.findRoute(route,{newUrl,method}));
             if(typeof res == "undefined"){
-                routes.push({method,url:newUrl,callBack,middlewaresArr});
+                routes.push({method,url:newUrl,callBack,middlewaresArr,uploadDir});
             }else{
                 throw Error("Route with method:"+method + " already exists");
             }
         }else{
-            routes.push({method,url:newUrl,callBack,middlewaresArr});
+            routes.push({method,url:newUrl,callBack,middlewaresArr,uploadDir});
         }
     }
 
@@ -135,15 +136,16 @@ class Server{
         }
     }
 
-        /**
+    /**
      * 
      * @param {string} url 
      * @param {Array<string>?} middlewaresArr
-     * @param {(response:classes,request:Request)=>void} callBack: (response,request) - return callBak 
+     * @param {(response:classes,request:Request)=>void} callBack: (response,request) - return callBak
+     * @param {string} uploadDir - the upload dir
      */
-    post(url,callBack,middlewaresArr=null){
+    post(url,callBack,middlewaresArr=null,uploadDir=null){
         try{
-            this[register]("POST",url,callBack,middlewaresArr);
+            this[register]("POST",url,callBack,middlewaresArr,uploadDir);
         }catch(e){
             throw new Error(e);
         }
@@ -166,10 +168,11 @@ class Server{
      * @param {string} url 
      * @param {Array<string>?} middlewaresArr
      * @param {(response:classes,request:Request)=>void} callBack: (response,request) - return callBak 
+     * @param {string} uploadDir - the upload dir 
      */
-    put(url,callBack,middlewaresArr=null){
+    put(url,callBack,middlewaresArr=null,uploadDir=null){
         try{
-            this[register]("PUT",url,callBack,middlewaresArr);
+            this[register]("PUT",url,callBack,middlewaresArr,uploadDir);
         }catch(e){
             throw new Error(e);
         }
