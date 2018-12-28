@@ -109,7 +109,12 @@ module.exports = {
             let arr = bodyParams.split("&");
             arr.forEach(val=>{
                 let param = val.split("=");
-                parsedParamas[param[0]] = decodeURIComponent(param[1]);
+                try {
+                    parsedParamas[param[0]] = decodeURIComponent(param[1]);
+                } catch (error) {
+                    parsedParamas[param[0]] = param[1];
+                    
+                }
             })
         }
         return {bodyParams:parsedParamas};
@@ -119,10 +124,10 @@ module.exports = {
      * @param arr - the middlewards to check
      * @param middlewards - the middlewares
      */
-    checkAllMiddlewares:(arr,middlewares,response,request,params,bodyParamas)=>{
+    checkAllMiddlewares:(arr,middlewares,response,request)=>{
         let resault = true;
         for(let i=0;i<arr.length;i++){
-            let res = middlewares[arr[i]](response,request,params,bodyParamas);
+            let res = middlewares[arr[i]](response,request);
             if(!res){
                 resault = {error:true,message:"Fall at "+arr[i]+" middleware"}
                 break;

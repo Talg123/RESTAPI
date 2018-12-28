@@ -24,7 +24,7 @@ class Server{
     runServer(){
         
         http.createServer(async (req,res)=>{
-            
+            res.setHeader('Access-Control-Allow-Origin', req.headers.origin);            
             res.setHeader("Content-type","application/json");
             let currentRoute = {url:req.url, method:req.method};
             let route = routes.find(route=>extra.findRouteToServe(route,currentRoute))
