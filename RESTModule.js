@@ -39,7 +39,7 @@ class Server{
                 if(route.middlewaresArr){
                     let response = extra.checkAllMiddlewares(route.middlewaresArr,middlewares,jsonResponse,req);
                     if(response.error){
-                        res.write(response.message)
+                        jsonResponse.returnJson(response.message,"Error",404,99)
                     }else{
                         route.callBack(jsonResponse,req);
                     }
@@ -47,9 +47,8 @@ class Server{
                     route.callBack(jsonResponse,req,params,bodyParams);
                 }
             }else{
-                res.write(JSON.stringify({error:"No Such Endpoint"}));
+                jsonResponse.returnJson({error:"No Such Endpoint"},"NoEndPoint",303,99);
             }
-            res.end();
         }).listen(this.port,this.hostname,()=>console.log("Server is runnign on port:"+this.port));
     };
 

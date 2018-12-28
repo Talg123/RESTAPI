@@ -20,5 +20,7 @@
     "url": "https://github.com/Talg123/RESTAPI/issues"
   },
   "homepage": "https://github.com/Talg123/RESTAPI#readme",
-  "dependencies": {}
+  "dependencies": {
+    "mysql": "^2.16.0"
+  }
 }
