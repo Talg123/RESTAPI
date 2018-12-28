@@ -24,7 +24,7 @@ class Server{
     runServer(){
         
         http.createServer(async (req,res)=>{
-            res.setHeader('Access-Control-Allow-Origin', req.headers.origin);            
+            // res.setHeader('Access-Control-Allow-Origin', req.headers.origin);            
             res.setHeader("Content-type","application/json");
             let currentRoute = {url:req.url, method:req.method};
             let route = routes.find(route=>extra.findRouteToServe(route,currentRoute))
@@ -47,7 +47,8 @@ class Server{
                     route.callBack(jsonResponse,req,params,bodyParams);
                 }
             }else{
-                jsonResponse.returnJson({error:"No Such Endpoint"},"NoEndPoint",303,99);
+                 new classes(res,null,null,null).returnJson({error:"No Such Endpoint"},"NoEndPoint",303,99);
+                
             }
         }).listen(this.port,this.hostname,()=>console.log("Server is runnign on port:"+this.port));
     };

@@ -1,3 +1,6 @@
+var multiparty = require("multiparty");
+var util = require("util");
+
 module.exports = {
      /**
      * return true if any route of the routes are the same, and have the same method
@@ -105,19 +108,32 @@ module.exports = {
         await req.on("data",data=>{
             bodyParams+=data.toString();
         });
-        if(bodyParams != ""){
-            let arr = bodyParams.split("&");
-            arr.forEach(val=>{
-                let param = val.split("=");
-                try {
-                    parsedParamas[param[0]] = decodeURIComponent(param[1]);
-                } catch (error) {
-                    parsedParamas[param[0]] = param[1];
-                    
-                }
+        if(req.headers['content-type'].indexOf("multipart/form-data") != -1){
+            var form = new multiparty.Form({
+                autoFields:true,
+                uploadDir:'C:\/Users\/tal-v\/Desktop'
+            });
+            let res = new Promise((resolve,rej)=>{
+                form.parse(req,(err,fields,files)=>{
+                    resolve({fields,files});
+                })
             })
-        }
+            await res.then(data=>{parsedParamas = data});
         return {bodyParams:parsedParamas};
+        }else{
+            if(bodyParams != ""){
+                let arr = bodyParams.split("&");
+                arr.forEach(val=>{
+                    let param = val.split("=");
+                    try {
+                        parsedParamas[param[0]] = decodeURIComponent(param[1]);
+                    } catch (error) {
+                        parsedParamas[param[0]] = param[1];
+                        
+                    }
+                })
+            }
+        }
     },
 
     /**
