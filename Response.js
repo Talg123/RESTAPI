@@ -1,5 +1,4 @@
-﻿
-/*!
+﻿/*!
  * rest-api-module
  * Copyright(c) 22018 Tal Goldberg <tal-vr@hotmail.com>
  */
@@ -7,17 +6,21 @@
 let response;
 let headerParams;
 let bodyParams;
+let request;
+let fileFolder;
 
 module.exports = class RestResponse{
     /**
      * @param {number} statusCode
      * @param {http.ServerResponse} res 
      */
-    constructor(res,statusCode=null,hp,bp){
+    constructor(res,statusCode=null,hp,bp,req,ff){
         response = res;
         this.statusCode = statusCode;
         headerParams = hp;
         bodyParams = bp;
+        request = req;
+        fileFolder = ff;
     }
 
     /**
@@ -40,7 +43,7 @@ module.exports = class RestResponse{
 
                 // // Set to true if you need the website to include cookies in the requests sent
                 // // to the API (e.g. in case you use sessions)
-                // response.setHeader('Access-Control-Allow-Credentials', true);
+                response.setHeader('Access-Control-Allow-Credentials', true);
         
         if(typeof body == "object" || body instanceof Array){
             if(statusCode != null){
@@ -50,6 +53,7 @@ module.exports = class RestResponse{
             }else{
                 statusCode = 200;
             }
+            response.setHeader("Content-type","application/json");
             let obj = {code,data:body,message};
             response.write(JSON.stringify(obj));
             response.end();

@@ -2,3 +2,4 @@ server.js
 router.js
 /.vscode
 _config.yml
+/uploads

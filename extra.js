@@ -109,9 +109,9 @@ module.exports = {
         await req.on("data",data=>{
             bodyParams+=data.toString();
         });
-        if(req.headers['content-type'].indexOf("multipart/form-data") != -1){
+        if(req.headers['content-type'] && req.headers['content-type'].indexOf("multipart/form-data") != -1){
             var form = new multiparty.Form({
-                uploadDir:uploadDir.uploadDir
+                uploadDir:uploadDir.Folder
             });
             let res = new Promise((resolve,rej)=>{
                 form.parse(req,(err,fields,files)=>{
@@ -119,11 +119,13 @@ module.exports = {
                 })
             })
             await res.then(data=>{parsedParamas = data});
-            if(uploadDir.fileName){
-                parsedParamas.files.file.forEach(val=>{
-                    fs.rename(val.path,uploadDir.uploadDir+""+val.originalFilename,(err)=>{
-                        console.log(err);
+            if(uploadDir.FileName && Object.keys(parsedParamas.files).length > 0){
+               parsedParamas = Object.keys(parsedParamas.files).map(val=>{
+                    let time = new Date().getTime()%10000;
+                        fs.rename(parsedParamas.files[val][0].path,uploadDir.Folder+""+time+parsedParamas.files[val][0].originalFilename,(err)=>{
                     });
+                    parsedParamas.files[val][0]['link'] = req.headers.host+"/"+uploadDir.Folder+""+time+parsedParamas.files[val][0].originalFilename;
+                    return parsedParamas.files[val][0];
                 })
             }
         return {bodyParams:parsedParamas};
