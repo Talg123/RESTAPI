@@ -1,6 +1,5 @@
 # RESTAPI
-REST API framework, Simple and tiny.  
-And no Dependencies AT ALL!.  
+REST API framework, Simple and tiny.
 Return JSON for client.
 
 First Install the module
@@ -16,7 +15,7 @@ const {Server,Router} = require("rest-api-module");
 
 Server.port = 3000;
 
-Router.get("/home",(response,request,headerParams,bodyParamas)=>{
+Router.get("/home",(response,request,headerParamas,bodyParamas)=>{
     let obj = {message:"Hello world"}
     //Body , Message, StatusCode, Code
     res.returnJson(obj,"Success",200,0);
@@ -41,7 +40,10 @@ accessToken=blabla
 ```javascript
 
 router.get("/test/:id", (res, req) => {
-    res.returnJson({header:res.getHeaderParamas(),body:res.getBodyParamas()},"Success",200,0);    
+    res.returnJson({
+        header:res.getHeaderParamas(),
+        body:res.getBodyParamas()
+        },"Success",200,0);    
 })
 ```
 And in the response we will have:
@@ -60,7 +62,7 @@ And in the response we will have:
             }
         },
         "body": {
-            "bodyParams": {
+            "bodyParamas": {
                 "accessToken": "blabla"
             }
         }
@@ -70,6 +72,19 @@ And in the response we will have:
 ```
 
 That way you save time in getting all the parameters were sent.
+
+## Files
+
+Now you can set file folders to upload to and if to save the original name of the  
+file, simply as that!
+While your uploading the files you will get the uploaded file in the  
+bodyParamas, you will have the full content + the "link".
+
+```javascript
+Server.setFiles("uploads/",true);
+
+```
+
 
 ## Response
 
@@ -92,7 +107,7 @@ them if you want
 Server.port = 3000;
 //first you add the name of the middleware then you use the callBack function
 Server.add("name",(response,request,headerParams,bodyParamas)=>{
-    if(headerParams.paramas.name == "I am Cool"){
+    if(headerParams.routerParamas.name == "I am Cool"){
         return true;
     }
     return false;

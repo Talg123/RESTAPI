@@ -64,15 +64,15 @@ module.exports = class RestResponse{
 
     /**
      * return the header parameters 
-     * @returns {HeaderParamas} - the header parameter object
+     * @returns {HeaderParams} - the header parameter object
      */
-    getHeaderParamas(){
+    getHeaderParams(){
         return headerParams;
     }
     
     /**
      * return the body parameters
-     * @returns {bodyParams} - the body parameter object
+     * @returns {BodyParams} - the body parameter object
      */
     getBodyParams(){
         return bodyParams;

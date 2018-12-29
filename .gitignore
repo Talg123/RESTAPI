@@ -3,3 +3,4 @@ router.js
 /.vscode
 _config.yml
 /uploads
+/node_modules

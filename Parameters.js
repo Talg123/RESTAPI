@@ -3,15 +3,15 @@
  * Copyright(c) 22018 Tal Goldberg <tal-vr@hotmail.com>
  */
 
-class HeaderParamas {
+class HeaderParams {
     constructor(routeParamas, otherParamas) {
-        this.routerParamas = routeParamas;
-        this.otherParamas = otherParamas;
+        this.routerParams = routeParamas;
+        this.otherParams = otherParamas;
     }
 }
 
-class BodyParamas {
+class BodyParams {
     constructor(bodyParamas) {
-        this.bodyParamas = bodyParamas;
+        this.bodyParams = bodyParamas;
     }
 }

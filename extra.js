@@ -142,6 +142,7 @@ module.exports = {
                     }
                 })
             }
+        return {bodyParams:parsedParamas};
         }
     },
 
