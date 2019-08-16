@@ -25,7 +25,7 @@ module.exports = class RestResponse{
 
     /**
      * 
-     * @param {JSON|Array} body 
+     * @param {JSON|JSON} body 
      * @param {string} message
      * @param {Number} statusCode - Default 200
      * @param {Number} code - default 0

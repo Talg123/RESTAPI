@@ -92,7 +92,7 @@ module.exports = {
         }
         
         if(headerParams){
-            return {routerParamas:params,otherParamas:headerParams};
+            return {routerParams:params,otherParams:headerParams};
         }
 
         return params;
@@ -103,33 +103,34 @@ module.exports = {
     /**
      * return the body parameters that were sent
      */
-    getBodyParams:async (req,uploadDir) =>{
-        let bodyParams="";
-        let parsedParamas={};
-        await req.on("data",data=>{
-            bodyParams+=data.toString();
-        });
-        if(req.headers['content-type'] && req.headers['content-type'].indexOf("multipart/form-data") != -1){
-            var form = new multiparty.Form({
-                uploadDir:uploadDir.Folder
+    getBodyParams:async (req,uploadDir) => {
+        return new Promise((resolve, rej) => {
+            let bodyParams="";
+            let parsedParamas={};
+            req.on("data",data=>{
+                bodyParams+=data.toString();
             });
-            let res = new Promise((resolve,rej)=>{
-                form.parse(req,(err,fields,files)=>{
-                    resolve({fields,files});
+            if(req.headers['content-type'] && req.headers['content-type'].indexOf("multipart/form-data") != -1){
+                var form = new multiparty.Form({
+                    uploadDir:uploadDir.Folder
+                });
+                let res = new Promise((resolve,rej)=>{
+                    form.parse(req,(err,fields,files)=>{
+                        resolve({fields,files});
+                    })
                 })
-            })
-            await res.then(data=>{parsedParamas = data});
-            if(uploadDir.FileName && Object.keys(parsedParamas.files).length > 0){
-               parsedParamas = Object.keys(parsedParamas.files).map(val=>{
-                    let time = new Date().getTime()%10000;
-                        fs.rename(parsedParamas.files[val][0].path,uploadDir.Folder+""+time+parsedParamas.files[val][0].originalFilename,(err)=>{
+                res.then(data=>{parsedParamas = data});
+                if(uploadDir.FileName && Object.keys(parsedParamas.files).length > 0){
+                   parsedParamas = Object.keys(parsedParamas.files).map(val=>{
+                        let time = new Date().getTime()%10000;
+                            fs.rename(parsedParamas.files[val][0].path,uploadDir.Folder+""+time+parsedParamas.files[val][0].originalFilename,(err)=>{
+                        });
+                        parsedParamas.files[val][0]['link'] = req.headers.host+"/"+uploadDir.Folder+""+time+parsedParamas.files[val][0].originalFilename;
+                        return parsedParamas.files[val][0];
                     });
-                    parsedParamas.files[val][0]['link'] = req.headers.host+"/"+uploadDir.Folder+""+time+parsedParamas.files[val][0].originalFilename;
-                    return parsedParamas.files[val][0];
-                })
+                }
+            return resolve({bodyParams:parsedParamas});
             }
-        return {bodyParams:parsedParamas};
-        }else{
             if(bodyParams != ""){
                 let arr = bodyParams.split("&");
                 arr.forEach(val=>{
@@ -141,9 +142,9 @@ module.exports = {
                         
                     }
                 })
+            return resolve({bodyParams:parsedParamas});
             }
-        return {bodyParams:parsedParamas};
-        }
+        });
     },
 
     /**

@@ -15,7 +15,7 @@ const {Server,Router} = require("rest-api-module");
 
 Server.port = 3000;
 
-Router.get("/home",(response,request,headerParamas,bodyParamas)=>{
+Router.get("/home",(response,request)=>{
     let obj = {message:"Hello world"}
     //Body , Message, StatusCode, Code
     res.returnJson(obj,"Success",200,0);
@@ -41,8 +41,8 @@ accessToken=blabla
 
 router.get("/test/:id", (res, req) => {
     res.returnJson({
-        header:res.getHeaderParamas(),
-        body:res.getBodyParamas()
+        header:res.getHeaderParams(),
+        body:res.getBodyParams()
         },"Success",200,0);    
 })
 ```
@@ -53,16 +53,16 @@ And in the response we will have:
     "code": 0,
     "data": {
         "header": {
-            "routerParamas": {
+            "routerParams": {
                 "id": "43"
             },
-            "otherParamas": {
+            "otherParams": {
                 "param1": "1",
                 "param2": "2"
             }
         },
         "body": {
-            "bodyParamas": {
+            "bodyParams": {
                 "accessToken": "blabla"
             }
         }
@@ -91,8 +91,8 @@ Server.setFiles("uploads/",true);
 | method | return | example  |
 |---	|---	|---	|
 | returnJson | return response object  	| {code:0,data:{msg:"hello"},message:"Success"}  	| 
-| getBodyParamas | return the body parameters  	|"bodyParams": {"accessToken": "blabla"}   	| 
-| getHeaderParamas  | return the header parameters| "routerParamas": {"id": "43"},"otherParamas": {"param2": "2"}  	|
+| getBodyParams | return the body parameters  	|"bodyParams": {"accessToken": "blabla"}   	| 
+| getHeaderParams  | return the header parameters| "routerParams": {"id": "43"},"otherParamas": {"param2": "2"}  	|
 
 ## Middlewares
 
@@ -106,14 +106,14 @@ them if you want
 
 Server.port = 3000;
 //first you add the name of the middleware then you use the callBack function
-Server.add("name",(response,request,headerParams,bodyParamas)=>{
-    if(headerParams.routerParamas.name == "I am Cool"){
+Server.add("name",(response,request)=>{
+    if(response.routerParams.name == "I am Cool"){
         return true;
     }
     return false;
 });
 // Assign the middlware
-Router.get("/home",(response,request,headerParams,bodyParamas)=>{
+Router.get("/home",(response,request)=>{
     //Body , Message=null, StatusCode=200, Code=0
     response.returnJson({message:"Hello World"});
 },['name']);
